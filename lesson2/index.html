@@ -1,0 +1,89 @@
+select * from client
+join department d on d.idDepartment = client.Department_idDepartment
+join application a on client.idClient = a.Client_idClient;
+
+select * from client where length(FirstName) < 6;
+
+select * from department where DepartmentCity = 'Lviv';
+
+select * from client where Education = 'high' order by LastName;
+
+select * from application order by idApplication desc limit 5;
+
+select * from client where LastName like '%v' or '%va';
+
+select * from client
+join department d on d.idDepartment = client.Department_idDepartment
+where DepartmentCity = 'Kyiv';
+
+select * from client
+join application a on client.idClient = a.Client_idClient
+where Sum > 5000 and CreditState = 'Not returned';
+
+select count(*), DepartmentCity from client
+join department d on d.idDepartment = client.Department_idDepartment
+group by DepartmentCity;
+
+select count(*), DepartmentCity from client
+join department d on d.idDepartment = client.Department_idDepartment
+where DepartmentCity = 'Lviv';
+
+select max(sum) as MathCredit, FirstName, LastName from client
+join application a on client.idClient = a.Client_idClient
+group by Client_idClient;
+
+select count(idApplication) as Credits, FirstName, LastName from client
+join application a on client.idClient = a.Client_idClient
+group by Client_idClient;
+
+select min(Sum) as MinCredit, max(Sum) as MaxCredit, FirstName, LastName from client
+join application a on client.idClient = a.Client_idClient
+group by Client_idClient;
+
+select count(idApplication) as Credit, FirstName, LastName from client
+join application a on client.idClient = a.Client_idClient
+where Education = 'high'
+group by Client_idClient;
+
+select (avg(Sum)), FirstName, LastName from application
+join client c on c.idClient = application.Client_idClient
+group by Client_idClient
+order by avg(Sum) desc limit 1;
+
+select idDepartment, DepartmentCity, sum(Sum) as MaxCreditSum from department
+join client c on department.idDepartment = c.Department_idDepartment
+join application a on c.idClient = a.Client_idClient
+group by Department_idDepartment
+order by max(Sum) desc limit 1;
+
+#update application
+#join client c on c.idClient = application.Client_idClient
+#set Sum = 6000
+#where Education = 'high';
+
+#update client
+#join department d on d.idDepartment = client.Department_idDepartment
+#set City = 'Kyiv'
+#where Department_idDepartment = 1 or Department_idDepartment = 4;
+
+delete from application where CreditState = 'Returned';
+
+select DepartmentCity, Sum from application
+join client c on c.idClient = application.Client_idClient
+join department d on d.idDepartment = c.Department_idDepartment
+where DepartmentCity = 'Lviv' and Sum > 5000;
+
+select max(Sum) from application where CreditState = 'Not Returned';
+
+select min(Sum) as Credit, FirstName, LastName from client
+join application a on client.idClient = a.Client_idClient
+group by Client_idClient
+order by min(Sum) limit 1;
+
+select * from application where Sum > (select avg(Sum) from application);
+
+select City, count(Client_idClient) as amount from client
+join application a on client.idClient = a.Client_idClient
+group by Client_idClient
+order by amount desc limit 1;
+
